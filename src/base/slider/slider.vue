@@ -56,21 +56,9 @@ export default {
       this.slider.refresh()
     })
   },
-  // activated() {
-  //   if (this.autoPlay) {
-  //     this._play()
-  //   }
-  // },
-  // deactivated() {
-  //   clearTimeout(this.timer)
-  // },
-  destroyed() {
-    clearTimeout(this.timer)
-  },
   methods: {
     _setSliderWidth(isResize) {
       this.children = this.$refs.sliderGroup.children
-
       let width = 0
       let sliderWidth = this.$refs.slider.clientWidth
       for (let i = 0; i < this.children.length; i++) {
@@ -79,8 +67,9 @@ export default {
         child.style.width = sliderWidth + 'px'
         width += sliderWidth
       }
-      if (this.loop && !isResize) width += 2 * sliderWidth
-
+      if (this.loop && !isResize) {
+        width += sliderWidth * 2
+      }
       this.$refs.sliderGroup.style.width = width + 'px'
     },
     _initSlider() {
@@ -112,6 +101,10 @@ export default {
     },
     _initDots() {
       this.dots = new Array(this.children.length)
+    },
+    destroyed() {
+      clearTimeout(this.timer)
+      // window.removeEventListener('resize')
     }
   }
 }

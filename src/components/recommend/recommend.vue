@@ -1,40 +1,47 @@
 <template>
   <div class="recommend">
-    <div class="recommend-content">
-      <div v-if="recommends.length" class="slider-wrapper">
-        <slider>
-          <div v-for="item in recommends" :key="item.fid">
-            <a :href="item.jumpurl">
-              <img class="needsclick" :src="item.pic" />
-            </a>
-          </div>
-        </slider>
-      </div>
-      <div class="recommend-list">
-        <h1 class="list-title">热门歌单推荐</h1>
-        <ul>
-          <li
-            @click="selectItem(item)"
-            v-for="item in discList"
-            :key="item.content_id"
-            class="item"
-          >
-            <div class="icon">
-              <img width="60" height="60" v-lazy="item.cover" />
+    <scroll class="recommend-content" :data="discList" ref="scroll">
+      <div>
+        <div v-if="recommends.length" class="slider-wrapper">
+          <slider>
+            <div v-for="item in recommends" :key="item.fid">
+              <a :href="item.jumpurl">
+                <img class="needsclick" @load="loadImage" :src="item.pic" />
+              </a>
             </div>
-            <div class="text">
-              <h2 class="name">{{item.username}}</h2>
-              <p class="desc">{{item.title}}</p>
-            </div>
-          </li>
-        </ul>
+          </slider>
+        </div>
+        <div class="recommend-list">
+          <h1 class="list-title">热门歌单推荐</h1>
+          <ul>
+            <li
+              @click="selectItem(item)"
+              v-for="item in discList"
+              :key="item.content_id"
+              class="item"
+            >
+              <div class="icon">
+                <img width="60" height="60" v-lazy="item.cover" />
+              </div>
+              <div class="text">
+                <h2 class="name">{{ item.username }}</h2>
+                <p class="desc">{{ item.title }}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
+      <div class="loading-container" v-show="!discList.length">
+        <loading></loading>
+      </div>
+    </scroll>
   </div>
 </template>
 
 <script>
 import Slider from 'base/slider/slider'
+import Scroll from 'base/scroll/scroll'
+import Loading from '@/base/loading/loading'
 import { getRecommend, getDiscList } from 'api/recommend'
 import { ERR_OK } from 'api/config'
 
@@ -47,7 +54,9 @@ export default {
     }
   },
   components: {
-    Slider
+    Slider,
+    Scroll,
+    Loading
   },
   created() {
     this._getRecommend()
@@ -67,6 +76,12 @@ export default {
           this.discList = res.recomPlaylist.data.v_hot
         }
       })
+    },
+    loadImage() {
+      if (!this.checkLoaded) {
+        this.$refs.scroll.refresh()
+        this.checkLoaded = true
+      }
     }
   }
 }
