@@ -2,7 +2,9 @@
   <div id="app">
     <m-header></m-header>
     <tab></tab>
-    <router-view></router-view>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
@@ -22,4 +24,7 @@ export default {
 @import '~common/stylus/variable'
 #app
   color: $color-theme
+  position: fixed
+  top: 0
+  width: 100%
 </style>
