@@ -20,6 +20,7 @@
             class="list-group-item"
             v-for="(item, index2) of group.items"
             :key="index2"
+            @click="selectItem(item)"
           >
             <img class="avatar" v-lazy="item.avatar" alt="" />
             <span class="name">{{ item.name }}</span>
@@ -182,6 +183,9 @@ export default {
         height += item.clientHeight
         this.listHeight.push(height)
       }
+    },
+    selectItem(item) {
+      this.$emit('select', item)
     }
   }
 }
