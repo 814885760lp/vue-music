@@ -43,16 +43,16 @@ export function getSongUrl(songmid) {
   const data = Object.assign({}, commonParams, {
     uin: 0,
     data: {
-      'url_mid': {
-        'module': 'vkey.GetVkeyServer',
-        'method': 'CgiGetVkey',
-        'param': {
-          'guid': '15424864',
-          'songmid': [songmid],
-          'songtype': [0],
-          'uin': '0',
-          'loginflag': 0,
-          'platform': '23'
+      url_mid: {
+        module: 'vkey.GetVkeyServer',
+        method: 'CgiGetVkey',
+        param: {
+          guid: '15424864',
+          songmid: [songmid],
+          songtype: [0],
+          uin: '0',
+          loginflag: 0,
+          platform: '23'
         }
       }
     }
@@ -66,10 +66,10 @@ export function getLyric(songid) {
 }
 
 /**
-* 使用下面的jsonp的方法抓取链接，虽然原接口是jsonp的，但是有header限制
-* jsonp这个工具包支持传header吗
-* 所以还是使用上面这个吧，开发环境代理一下，线上静态环境暂无办法
-*/
+ * 使用下面的jsonp的方法抓取链接，虽然原接口是jsonp的，但是有header限制
+ * jsonp这个工具包支持传header吗
+ * 所以还是使用上面这个吧，开发环境代理一下，线上静态环境暂无办法
+ */
 
 // 获取歌词接口 jsonp 尝试
 export function _getLyric(mid) {

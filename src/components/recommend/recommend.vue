@@ -1,5 +1,5 @@
 <template>
-  <div class="recommend">
+  <div class="recommend" ref="recommend">
     <scroll class="recommend-content" :data="discList" ref="scroll">
       <div>
         <div v-if="recommends.length" class="slider-wrapper">
@@ -35,6 +35,7 @@
         <loading></loading>
       </div>
     </scroll>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -44,9 +45,12 @@ import Scroll from 'base/scroll/scroll'
 import Loading from '@/base/loading/loading'
 import { getRecommend, getDiscList } from 'api/recommend'
 import { ERR_OK } from 'api/config'
+import { playlistMixin } from '@/common/js/mixin'
+import { mapMutations } from 'vuex'
 
 export default {
   name: 'Recommend',
+  mixins: [playlistMixin],
   data() {
     return {
       recommends: [],
@@ -63,6 +67,14 @@ export default {
     this._getDiscList()
   },
   methods: {
+    ...mapMutations({
+      setDisc: 'SET_DISC'
+    }),
+    handlePlaylist(playlist) {
+      const bottom = playlist.length > 0 ? '60px' : ''
+      this.$refs.recommend.style.bottom = bottom
+      this.$refs.scroll.refresh()
+    },
     _getRecommend() {
       getRecommend().then(res => {
         if (res.code === ERR_OK) {
@@ -82,6 +94,12 @@ export default {
         this.$refs.scroll.refresh()
         this.checkLoaded = true
       }
+    },
+    selectItem(item) {
+      this.$router.push({
+        path: `/recommend/${item.content_id}`
+      })
+      this.setDisc(item)
     }
   }
 }
